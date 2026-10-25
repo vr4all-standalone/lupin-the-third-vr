@@ -52,7 +52,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 # src\vr\AndroidManifest.xml), its library entry, and the PC zip's start script (hotd2-vr\assets).
 $appId = 'com.vrlightgunhub.lupin'
 $appLabel = 'Lupin the Third VR'
-$appVersion = '1.0.1'
+$appVersion = '1.0.2'
 $appLauncher = 'com.flycast.emulator.LupinStartActivity'
 $playCmd = 'Play Lupin the Third.cmd'
 
@@ -222,7 +222,7 @@ function Find-AppIdentityFault([string[]]$badgingLines, [string[]]$manifestTree,
     $badging = $badgingLines | Where-Object { $_ -match '^package:' } | Select-Object -First 1
     $wantVersion = [regex]::Escape("$appVersion-g") + $(if ($testBuild) { '[0-9a-f]+' } else { [regex]::Escape($shortHash) })
     if ($badging -notmatch "^package: name='$([regex]::Escape($appId))'") { "the package is not $appId" }
-    if ($badging -notmatch "versionCode='2'") { 'the versionCode is not 2' }
+    if ($badging -notmatch "versionCode='3'") { 'the versionCode is not 3' }
     if ($badging -notmatch "versionName='$wantVersion'") {
         "the versionName is not $appVersion-g$(if ($testBuild) { '<commit>' } else { $shortHash })"
     }
@@ -433,9 +433,9 @@ Check the source README and Lupin findings for the current verified scope.
    and the archive folder as its working directory, so this copy uses its own emu.cfg.
 
 Solo controls: either trigger takes and fires the gun, A is P1 Start, either B/Y reloads,
-and X joins P2. The menu toggle "2P: P1 left / P2 right" is On by default: once P2 joins,
-P1 uses the left gun and X/Y, P2 the right gun and A/B. Off reverses the dual layout.
-The toggle never fixes the solo gun's hand. Left Menu opens settings, left stick click recenters,
+and X joins P2. The "Two players" setting defaults to "P1 left / P2 right": once P2 joins,
+P1 uses the left gun and X/Y, P2 the right gun and A/B. Choose "P1 right / P2 left" to reverse the dual layout.
+The setting never fixes the solo gun's hand. Left Menu opens settings, left stick click recenters,
 right stick click toggles the laser. The paused menu includes gun choice/angle, both reload
 modes, the 2P layout, haptics Off/Light/Medium/Strong, world size, panel distance, wider view,
 How to play and confirmed Quit. Hands are empty during noninteractive story scenes.
