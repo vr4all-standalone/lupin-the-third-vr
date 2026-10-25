@@ -9,7 +9,7 @@ namespace config { struct Setting { std::string value; std::string get() const {
 constexpr int Left=0, Right=1;
 enum class Holds { Controller, Gun, Nothing };
 bool menuHowToPlay=false, dualWield=false, p1Armed=false, inCutscene=false;
-int joinedStartHand=-1;
+bool startHeld[2] {}; int startPlayer[2] {1,0};
 struct Gun { int hand; bool triggerWas=false,triggerWait=false; long long pullAt=0; bool pointedDown=false,offArmed=false; } guns[2] {{Right},{Left}};
 using XrDuration=long long;
 constexpr int XR_TYPE_HAPTIC_ACTION_INFO=1, XR_TYPE_HAPTIC_VIBRATION=2;
@@ -38,19 +38,39 @@ int main(){
 
  for(const auto& entry : {std::pair<const char*,int>{"off",0},{"OFF",0},{"0",0},{"light",1},{"LIGHT",1},{"low",1},{"1",1},{"medium",2},{"MeDiUm",2},{"normal",2},{"2",2},{"strong",3},{"STRONG",3},{"3",3},{"",2},{"invalid",2},{"-1",2},{"4",2}}){config::VrHaptics.value=entry.first;check(hapticsLevel()==entry.second,"legacy/word haptic migration");}
  for(bool layout : {false,true})for(bool two : {false,true})for(int buttons=0;buttons<4;++buttons){
-  config::VrDualP1Left=layout;dualWield=two;joinedStartHand=-1;
+  config::VrDualP1Left=layout;dualWield=two;startHeld[Left]=startHeld[Right]=false;
   bool a=false,b=false;playerStartButtons((buttons&1)!=0,(buttons&2)!=0,a,b);
   const bool p1left=two && layout;
   check(a==((buttons&(p1left?1:2))!=0),"Start follows P1 only in two-player mode");
   check(b==((buttons&(p1left?2:1))!=0),"Start/join follows P2 without changing solo controls");
  }
- config::VrDualP1Left=true;dualWield=true;joinedStartHand=Left;
+ config::VrDualP1Left=true;dualWield=false;startHeld[Left]=startHeld[Right]=false;
  bool a=false,b=false;playerStartButtons(true,false,a,b);
+ dualWield=true;playerStartButtons(true,false,a,b);
  check(!a && b,"held join stays P2 after P1 moves onto its controller");
  playerStartButtons(false,false,a,b);
- check(!a && !b && joinedStartHand==-1,"join latch clears on release");
+ check(!a && !b && !startHeld[Left] && !startHeld[Right],"join latch clears on release");
  playerStartButtons(true,false,a,b);check(a && !b,"fresh left Start belongs to P1 after join release");
  playerStartButtons(false,true,a,b);check(!a && b,"fresh right Start belongs to P2 after join release");
+ // A P2 Start held as P2 leaves must not become a fresh P1 Start in solo mode.
+ startHeld[Left]=startHeld[Right]=false;dualWield=true;config::VrDualP1Left=true;
+ playerStartButtons(false,false,a,b);playerStartButtons(false,true,a,b);
+ check(!a && b,"right Start belongs to P2 in the default dual layout");
+ dualWield=false;playerStartButtons(false,true,a,b);
+ check(!a && b,"held P2 Start cannot become P1 Start when returning to solo");
+ playerStartButtons(false,false,a,b);playerStartButtons(false,true,a,b);
+ check(a && !b,"released right Start returns to P1 in solo");
+ // Held P1-left must not turn into a P2 join on returning to solo.
+ dualWield=true;playerStartButtons(false,false,a,b);playerStartButtons(true,false,a,b);
+ check(a && !b,"fresh left Start belongs to P1 in default dual");
+ dualWield=false;playerStartButtons(true,false,a,b);
+ check(a && !b,"held P1 Start cannot automatically rejoin P2 after P2 leaves");
+ // A layout toggle also takes effect only on a fresh physical Start press.
+ dualWield=true;config::VrDualP1Left=true;playerStartButtons(false,false,a,b);playerStartButtons(true,false,a,b);
+ config::VrDualP1Left=false;playerStartButtons(true,false,a,b);
+ check(a && !b,"held Start keeps its owner while the dual layout changes");
+ playerStartButtons(false,false,a,b);playerStartButtons(true,false,a,b);
+ check(!a && b,"fresh Start follows the changed layout");
  for(bool layout : {false,true}){
   config::VrDualP1Left=layout;dualWield=false;guns[0].hand=Right;guns[0].triggerWas=false;
   const bool tracked[2]={true,true};const float leftPull[2]={1.f,0.f},rightPull[2]={0.f,1.f},bothPull[2]={1.f,1.f};

@@ -2,7 +2,7 @@
 param([ValidateSet('labels-solo','p1-left','cutscene')][string[]]$Only=@('labels-solo','p1-left','cutscene'),[switch]$Reuse)
 $ErrorActionPreference='Stop'
 $repo=Split-Path -Parent $PSScriptRoot
-$base='config:vr.GameHands=no,config:vr.BuiltInGun=yes,config:vr.Gun=1,config:vr.Haptics=medium,config:vr.DualP1Left=yes,config:vr.FovScale=2,config:vr.WidenFov=yes'
+$base='config:vr.GameHands=no,config:vr.BuiltInGun=yes,config:vr.Gun=1,config:vr.Haptics=medium,config:vr.P1Hand=right,config:vr.FovScale=2,config:vr.WidenFov=yes'
 function Invoke-Run([hashtable]$run){
  if(-not $Reuse){$output=@(& (Join-Path $PSScriptRoot 'vr-test.ps1') @run);$code=$LASTEXITCODE;$output | ForEach-Object {Write-Host $_};if($code -ne 0){throw "$($run.Name) failed (exit $code)"}}
  $log=Join-Path $repo "build-win\vrtest\$($run.Name)\flycast.log"
@@ -21,10 +21,10 @@ foreach($case in $Only){
    [void](Invoke-Run $run);Write-Output "PASS solo labels $profile"
   }
  }elseif($case -eq 'p1-left'){
-  $on=@('VR: P1 magazine 0 -> 7|4|xr left/trigger 1 150','VR: P1 magazine 0 -> 7|4.8|xr left/trigger 1 150','VR: P1 magazine 0 -> 7|5.6|xr left/y 1 150','VR: P1 magazine 0 -> 7|6.6|xr left/x 1 200',
-   'VR: P2 magazine 0 -> 6|3|xr right/trigger 1 150','VR: P2 magazine 0 -> 6|3.8|xr right/trigger 1 150','VR: P2 magazine 0 -> 6|4.6|xr right/b 1 150','VR: P2 magazine 0 -> 6|5.4|xr left/trigger 1 150','VR: P2 magazine 0 -> 6|6.2|xr left/y 1 150',
-   'VR: P2 magazine 0 -> 6|6.6|pose right 0.18 1.3 -0.35 0 -80','VR: P2 magazine 0 -> 6|6.7|pose left 0.18 1.3 -0.35 0 -80','VR: P2 magazine 0 -> 6|7|xr left/menu 1 150','VR: P2 magazine 0 -> 6|7.4|stick right 0 -1 150','VR: P2 magazine 0 -> 6|7.8|stick right 0 -1 150','VR: P2 magazine 0 -> 6|8.2|stick right 0 -1 150','VR: P2 magazine 0 -> 6|8.6|stick right 0 -1 150','VR: P2 magazine 0 -> 6|9|stick right 0 -1 150',
-   'VR: P2 magazine 0 -> 6|9.5|stick right 1 0 150','VR: P2 magazine 0 -> 6|10|shot hands-menu','VR: P2 magazine 0 -> 6|10.4|xr right/trigger 1 2000','VR: P2 magazine 0 -> 6|11.5|xr right/b 1 150','VR: P2 magazine 0 -> 6|12.8|pose right 0.18 1.3 -0.35 0 0','VR: P2 magazine 0 -> 6|12.9|pose left 0.18 1.3 -0.35 0 0','VR: P2 magazine 0 -> 6|13.6|xr right/trigger 1 150','VR: P2 magazine 0 -> 6|14|xr left/trigger 1 150')
+  $on=@('VR: P1 magazine 0 -> 7|4|xr left/trigger 1 150','VR: P1 magazine 0 -> 7|4.4|xr right/trigger 1 150','VR: P1 magazine 0 -> 7|4.8|xr left/trigger 1 150','VR: P1 magazine 0 -> 7|5.6|xr left/y 1 150','VR: P1 magazine 0 -> 7|6.6|xr left/x 1 1200',
+   'VR: P2 magazine 0 -> 6|3|xr right/trigger 1 150','VR: P2 magazine 0 -> 6|3.8|xr right/trigger 1 150','VR: P2 magazine 0 -> 6|4.6|xr right/b 1 150','VR: P2 magazine 0 -> 6|5.4|xr left/trigger 1 150','VR: P2 magazine 0 -> 6|5.8|xr left/trigger 1 150','VR: P2 magazine 0 -> 6|6.2|xr left/y 1 150',
+   'VR: P2 magazine 0 -> 6|6.6|pose right 0.18 1.3 -0.35 0 -80','VR: P2 magazine 0 -> 6|6.7|pose left 0.18 1.3 -0.35 0 -80','VR: P2 magazine 0 -> 6|6.9|xr left/x 1 500','VR: P2 magazine 0 -> 6|7|xr left/menu 1 150','VR: P2 magazine 0 -> 6|7.4|stick right 0 -1 150','VR: P2 magazine 0 -> 6|7.8|stick right 0 -1 150','VR: P2 magazine 0 -> 6|8.2|stick right 0 -1 150','VR: P2 magazine 0 -> 6|8.6|stick right 0 -1 150','VR: P2 magazine 0 -> 6|9|stick right 0 -1 150',
+   'VR: P2 magazine 0 -> 6|9.5|stick right 1 0 150','VR: P2 magazine 0 -> 6|10|shot hands-menu','VR: P2 magazine 0 -> 6|10.4|xr right/trigger 1 2000','VR: P2 magazine 0 -> 6|10.6|xr left/x 1 2000','VR: P2 magazine 0 -> 6|11.5|xr right/b 1 150','VR: P2 magazine 0 -> 6|12.8|pose right 0.18 1.3 -0.35 0 0','VR: P2 magazine 0 -> 6|12.9|pose left 0.18 1.3 -0.35 0 0','VR: P2 magazine 0 -> 6|13.6|xr right/trigger 1 150','VR: P2 magazine 0 -> 6|14|xr left/trigger 1 150')
   $run=@{Game='lupinshoo';Name='lp-sync-p1-left';Seconds=126;XrSim=$true;Port=27076;Visible=$true;Config=$base+',config:vr.WatchRam=0ca4c808:4,0ca4c80c:4,0ca4c828:4,0ca4c82c:4';At=@('60=xr right/a 1 200','64=xr right/a 1 1000','70=xr right/a 1 200','80=pose left 0.18 1.3 -0.35 0 0');On=$on;Expect=@('XR: right hand: controller -> gun \(start\)','VR: P1 magazine 0 -> 7','VR: P2 magazine 0 -> 6','XR: player 2 joins: a gun in each hand','XR: player 1 reload button \(sensor\)','XR: player 2 reload button \(sensor\)','XR: menu 2P: P1 left / P2 right -> Off','XR: the guns swap hands: player 1.s in the right');Reject=@('XR: initialisation failed','Game load failed')}
   $text=Invoke-Run $run;$lines=$text -split '\r?\n'
   $firstJoin=Clock (@($lines | Where-Object {$_ -match 'XR: player 2 joins:'})[0])
@@ -34,8 +34,8 @@ foreach($case in $Only){
   $swap=Clock $swapLines[0]
   foreach($player in 1,2){
    $hand=if($player -eq 1){'left'}else{'right'};$other=if($player -eq 1){'right'}else{'left'}
-   $kicks=(Lines-In $lines "XR: P$player kick:" 90 ($swap-1)).Count
-   $pulses=(Lines-In $lines "XRSIM: haptic $hand 0\.048 1\.000" 90 ($swap-1)).Count
+   $kicks=(Lines-In $lines "XR: P$player kick:" ($firstJoin+1) ($swap-1)).Count
+   $pulses=(Lines-In $lines "XRSIM: haptic $hand 0\.048 1\.000" ($firstJoin+1) ($swap-1)).Count
    if($kicks -lt 2 -or $pulses -ne $kicks){throw "P$player must have accepted rounds and matching $hand haptics ($kicks kicks, $pulses pulses)"}
   }
   foreach($player in 1,2){if((Lines-In $lines "XR: player $player pointed down \(reload\)" ($swap-6) $swap).Count -ne 1){throw "P$player did not establish the pre-menu downward reload latch"}}
@@ -43,6 +43,13 @@ foreach($case in $Only){
   if((Lines-In $lines 'XR: P[12] kick:' $swap ($swap+.7)).Count){throw 'Held menu trigger fired during swap'}
   if(-not (Lines-In $lines 'Light gun P1 at .*trigger 1' ($swap+.8) ($swap+3)).Count){throw 'Right trigger did not route to P1 after swap'}
   if(-not (Lines-In $lines 'Light gun P2 at .*trigger 1' ($swap+1.5) ($swap+4)).Count){throw 'Left trigger did not route to P2 after swap'}
+  if((Lines-In $lines 'Light gun P1 at .*start 1' $swap ($swap+1)).Count){throw 'A fresh left Start inside the paused menu kept its old P1 owner'}
+  if(-not (Lines-In $lines 'Light gun P2 at .*start 1' $swap ($swap+1)).Count){throw 'Fresh left Start after the paused layout change did not belong to P2'}
+  $joinHeld=@(Lines-In $lines 'Light gun P2 at .*start 1' $firstJoin ($firstJoin+1.5))
+  if($joinHeld.Count -lt 2 -or ((Clock $joinHeld[-1])-(Clock $joinHeld[0])) -lt .7){throw 'Held P2 join press did not retain its owner through layout reassignment'}
+  if((Lines-In $lines 'Light gun P1 at .*start 1' ($firstJoin+.1) ($firstJoin+1.1)).Count){throw 'Held P2 join was reinterpreted as P1 Start'}
+  $soloText=(Lines-In $lines 'XR: the gun is in the (left|right) hand' 85 $firstJoin) -join "`n"
+  if($soloText -notmatch 'left hand' -or $soloText -notmatch 'right hand'){throw 'Solo triggers did not transfer the gun both ways with default dual layout enabled'}
   $cfg=Get-Content -LiteralPath (Join-Path $repo 'build-win\vrtest\lp-sync-p1-left\emu.cfg.after') -Raw
   if($cfg -cnotmatch '(?m)^vr\.DualP1Left = no\r?$'){throw 'Hand choice was not persisted'}
   Write-Output 'PASS actual Lupin P1-left start, accepted rounds/haptic hands, independent reloads, P2 join and safe live hand swap with controllers held downward'

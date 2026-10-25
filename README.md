@@ -140,12 +140,12 @@ software licence. It includes no game files. Physical PC VR headset use remains 
 <a id="controls"></a>
 ## Controls
 
-Default Quest Touch assignment:
+Solo controls on Quest Touch (the two-player layout is described below):
 
 | Input | Action |
 | :--- | :--- |
 | Right A / B | P1 Start / P1 Reload |
-| Left X / Y | P2 Start or join / P2 Reload |
+| Left X / Y | Join P2 / P1 Reload |
 | Trigger | Shoot; either hand can hold P1's single gun before P2 joins |
 | Left Menu | Open/close the paused settings menu |
 | Left stick click | Recenter |
