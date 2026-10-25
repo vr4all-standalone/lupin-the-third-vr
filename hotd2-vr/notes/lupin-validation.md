@@ -61,3 +61,11 @@ already held down. A real production-block regression failed before the fix, the
 checks passed after the downward latch was transferred with its physical controller. All four
 latch combinations are covered. The reviewer rechecked and closed the finding. A final-binary
 runtime scenario also holds both controllers down through the swap, requiring no extra reload.
+
+## 1.0.1 two-player hand layout
+
+The hand preference is now a two-player-only On/Off toggle, **2P: P1 left / P2 right**, enabled by default through the new `vr.DualP1Left` key. Earlier `vr.P1Hand` values cannot remap solo controls. In solo, either trigger transfers the gun, A starts P1, X joins P2 and either B/Y reloads P1. With two players active, guns, Start/reload and controller labels follow the dual assignment. Turning the toggle Off reverses it.
+
+Physical Start presses retain their logical player until release across joins, P2 leaving and menu layout changes. Ownership is sampled while paused, including release/repress events, without sending menu input into the game. A join that moves P1 onto another controller waits for its held trigger to release. Existing physical-controller downward reload latches remain intact during swaps.
+
+The regression coverage includes production-function/block checks for solo transfers and held Start transitions, plus an actual original-game simulator route covering default layout, both solo trigger directions, held P2 join, independent accepted rounds and haptic hands, reloads, a paused release/repress around a layout change, and swapping while the controllers remain pointed down. The package version is 1.0.1 with Android versionCode 2 and the existing app identity/signing setup. Final build hashes, test results and publication checks are recorded in ignored `dist/hand-layout-verification.json`; that report is generated only after successful artifact checks. No headset is installed by this workflow.

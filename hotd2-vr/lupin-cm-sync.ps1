@@ -46,7 +46,9 @@ foreach($case in $Only){
   if((Lines-In $lines 'Light gun P1 at .*start 1' $swap ($swap+1)).Count){throw 'A fresh left Start inside the paused menu kept its old P1 owner'}
   if(-not (Lines-In $lines 'Light gun P2 at .*start 1' $swap ($swap+1)).Count){throw 'Fresh left Start after the paused layout change did not belong to P2'}
   $joinHeld=@(Lines-In $lines 'Light gun P2 at .*start 1' $firstJoin ($firstJoin+1.5))
-  if($joinHeld.Count -lt 2 -or ((Clock $joinHeld[-1])-(Clock $joinHeld[0])) -lt .7){throw 'Held P2 join press did not retain its owner through layout reassignment'}
+  # Input logs record state changes, not repeated held frames: measure press-to-release edges.
+  $joinReleased=@(Lines-In $lines 'Light gun P2 at .*start 0' ($firstJoin+.01) ($firstJoin+2))
+  if(-not $joinHeld.Count -or -not $joinReleased.Count -or ((Clock $joinReleased[0])-(Clock $joinHeld[0])) -lt .7){throw 'Held P2 join press did not retain its owner through layout reassignment'}
   if((Lines-In $lines 'Light gun P1 at .*start 1' ($firstJoin+.1) ($firstJoin+1.1)).Count){throw 'Held P2 join was reinterpreted as P1 Start'}
   $soloText=(Lines-In $lines 'XR: the gun is in the (left|right) hand' 85 $firstJoin) -join "`n"
   if($soloText -notmatch 'left hand' -or $soloText -notmatch 'right hand'){throw 'Solo triggers did not transfer the gun both ways with default dual layout enabled'}
