@@ -21,7 +21,7 @@ $harness = Join-Path $PSScriptRoot 'vr-test.ps1'
 $vrcheck = Join-Path $PSScriptRoot 're\vrcheck.py'
 $inv = [Globalization.CultureInfo]::InvariantCulture
 $base = 'config:vr.GameHands=no,config:vr.BuiltInGun=yes,config:vr.FovScale=2,config:vr.WidenFov=yes'
-$defaults = ',config:vr.Gun=1,config:vr.GunScale=0.68,config:vr.GunAngle=0,config:vr.Reload=0,config:vr.Laser=yes,config:vr.Haptics=medium,config:vr.P1Hand=right,config:vr.WorldScale=0.11,config:vr.HudDepth=40,config:vr.Widen=yes'
+$defaults = ',config:vr.Gun=1,config:vr.GunScale=0.68,config:vr.GunAngle=0,config:vr.Reload=0,config:vr.Laser=yes,config:vr.Haptics=medium,config:vr.DualP1Left=no,config:vr.WorldScale=0.11,config:vr.HudDepth=40,config:vr.Widen=yes'
 $commonReject = @('XR: initialisation failed','Game load failed')
 function T([double]$n) { $n.ToString('0.0##',$inv) }
 # The measured 13-row panel is shared with CM. These pointer tests run before
@@ -50,7 +50,7 @@ $scenarios=[ordered]@{
         Expect=@('XR: menu at 1\.20 m, 13 rows, row pitch 0\.063 m, top row \+0\.369 m',
             'XR: menu Recenter$','XR: menu Gun -> Arcade gun','XR: menu Gun -> Zapper',
             'XR: menu Gun angle -> \+1$','XR: menu Reload -> Point off-screen$',
-            'XR: menu Hands -> P1 left hand - P2 right hand$','XR: menu Laser -> Off$','XR: menu Haptics -> Strong$','XR: menu World size -> 0\.121$',
+            'XR: menu 2P: P1 left / P2 right -> On$','XR: menu Laser -> Off$','XR: menu Haptics -> Strong$','XR: menu World size -> 0\.121$',
             'XR: menu Panel distance -> 45$','XR: menu Wider view -> Off \(next start\)$',
             'XR: how to play on$','XR: how to play off \(chosen\)$','XR: menu quit armed$',
             'XR: menu Resume$','XR: menu closed \(resumed\)$')
@@ -64,7 +64,7 @@ $scenarios=[ordered]@{
         '9.3=stick right 0 -1 150','9.8=stick right 1 0 150',
         '10.3=stick right 0 -1 150','10.8=stick right 1 0 150','12.8=xr right/b 1 150')
         Expect=@('XR: menu Gun angle -> \+2$','XR: menu Reload -> Shoot off-screen$',
-            'XR: menu Hands -> P1 right hand - P2 left hand$','XR: menu Laser -> On$','XR: menu Haptics -> Medium$','XR: menu World size -> 0\.133$',
+            'XR: menu 2P: P1 left / P2 right -> Off$','XR: menu Laser -> On$','XR: menu Haptics -> Medium$','XR: menu World size -> 0\.133$',
             'XR: menu Panel distance -> 50$','XR: menu Wider view -> On \(next start\)$','XR: menu closed \(resumed\)$')
         Reject=@('XR: player [12] reload button'); Requires='menu' }
     labels=@{ Seconds=16; Config=$base+$defaults; Visible=$true; At=@('2=xr left/menu 1 150',
@@ -195,7 +195,7 @@ function Invoke-Scenario([string]$name) {
 }
 function Test-Menu {
     Invoke-Scenario 'menu'
-    Assert-Config 'menu' @{'vr.GunAngle'='1';'vr.Reload'='1';'vr.Laser'='no';'vr.Haptics'='strong';'vr.P1Hand'='left';
+    Assert-Config 'menu' @{'vr.GunAngle'='1';'vr.Reload'='1';'vr.Laser'='no';'vr.Haptics'='strong';'vr.DualP1Left'='yes';
         'vr.WorldScale'=[double]0.121;'vr.HudDepth'=[double]45;'vr.Widen'='no';'vr.GunFile'='zapper'}
     Assert-Count 'menu' 'XR: menu quit armed$' 1
     Assert-Count 'menu' 'XRSIM: haptic right 0\.072 1\.000' 1
@@ -218,7 +218,7 @@ foreach($name in $Only) {
             try {
                 if(-not $Reuse){Copy-Item -LiteralPath (Join-Path (Get-Dir 'menu') 'emu.cfg.after') -Destination $cfg -Force}
                 Invoke-Scenario $name
-                Assert-Config $name @{'vr.GunAngle'='2';'vr.Reload'='0';'vr.Laser'='yes';'vr.Haptics'='medium';'vr.P1Hand'='right';
+                Assert-Config $name @{'vr.GunAngle'='2';'vr.Reload'='0';'vr.Laser'='yes';'vr.Haptics'='medium';'vr.DualP1Left'='no';
                     'vr.WorldScale'=[double]0.1331;'vr.HudDepth'=[double]50;'vr.Widen'='yes'}
             } finally {
                 if(-not $Reuse){if($had){[IO.File]::WriteAllBytes($cfg,$bytes)}elseif(Test-Path -LiteralPath $cfg){Remove-Item -LiteralPath $cfg}}

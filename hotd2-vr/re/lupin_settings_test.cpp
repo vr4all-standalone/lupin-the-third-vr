@@ -5,10 +5,11 @@
 #include <cstdlib>
 #include <string>
 #include <utility>
-namespace config { struct Setting { std::string value; std::string get() const { return value; } }; Setting VrP1Hand, VrHaptics; }
+namespace config { struct Setting { std::string value; std::string get() const { return value; } }; Setting VrP1Hand, VrHaptics; bool VrDualP1Left=true; }
 constexpr int Left=0, Right=1;
 enum class Holds { Controller, Gun, Nothing };
 bool menuHowToPlay=false, dualWield=false, p1Armed=false, inCutscene=false;
+int joinedStartHand=-1;
 struct Gun { int hand; bool triggerWas=false,triggerWait=false; long long pullAt=0; bool pointedDown=false,offArmed=false; } guns[2] {{Right},{Left}};
 using XrDuration=long long;
 constexpr int XR_TYPE_HAPTIC_ACTION_INFO=1, XR_TYPE_HAPTIC_VIBRATION=2;
@@ -21,12 +22,45 @@ XrHapticVibration lastPulse{};
 int xrApplyHapticFeedback(int,const XrHapticActionInfo* info,const XrHapticBaseHeader* pulse){++calls;lastHand=info->subactionPath;lastPulse=*reinterpret_cast<const XrHapticVibration*>(pulse);return 0;}
 #define XR(name) name
 #define NOTICE_LOG(...)
+void noteHolds(const char*) {}
 #include "settings_under_test.inc"
 int checks=0;
 void check(bool okay,const char* message){++checks;if(!okay){std::fprintf(stderr,"FAIL %s\n",message);std::exit(1);}}
 int main(){
- for(const auto& entry : {std::pair<const char*,int>{"right",1},{"RIGHT",1},{"left",0},{"LeFt",0},{"",1},{"invalid",1},{" left",1}}){config::VrP1Hand.value=entry.first;check(p1Hand()==entry.second,"P1 hand parsing/default");}
+ // The two-player layout must never remap single-player Start or force the gun hand.
+ config::VrP1Hand.value="left"; config::VrDualP1Left=true; dualWield=false;
+ check(p1Hand()==Right,"single-player keeps original Start controls despite a saved left-hand layout");
+ config::VrP1Hand.value="right"; dualWield=true;
+ check(p1Hand()==Left,"two-player default puts P1 on the left");
+ config::VrDualP1Left=false;
+ check(p1Hand()==Right,"two-player toggle off puts P1 on the right");
+ dualWield=false; config::VrDualP1Left=true;
+
  for(const auto& entry : {std::pair<const char*,int>{"off",0},{"OFF",0},{"0",0},{"light",1},{"LIGHT",1},{"low",1},{"1",1},{"medium",2},{"MeDiUm",2},{"normal",2},{"2",2},{"strong",3},{"STRONG",3},{"3",3},{"",2},{"invalid",2},{"-1",2},{"4",2}}){config::VrHaptics.value=entry.first;check(hapticsLevel()==entry.second,"legacy/word haptic migration");}
+ for(bool layout : {false,true})for(bool two : {false,true})for(int buttons=0;buttons<4;++buttons){
+  config::VrDualP1Left=layout;dualWield=two;joinedStartHand=-1;
+  bool a=false,b=false;playerStartButtons((buttons&1)!=0,(buttons&2)!=0,a,b);
+  const bool p1left=two && layout;
+  check(a==((buttons&(p1left?1:2))!=0),"Start follows P1 only in two-player mode");
+  check(b==((buttons&(p1left?2:1))!=0),"Start/join follows P2 without changing solo controls");
+ }
+ config::VrDualP1Left=true;dualWield=true;joinedStartHand=Left;
+ bool a=false,b=false;playerStartButtons(true,false,a,b);
+ check(!a && b,"held join stays P2 after P1 moves onto its controller");
+ playerStartButtons(false,false,a,b);
+ check(!a && !b && joinedStartHand==-1,"join latch clears on release");
+ playerStartButtons(true,false,a,b);check(a && !b,"fresh left Start belongs to P1 after join release");
+ playerStartButtons(false,true,a,b);check(!a && b,"fresh right Start belongs to P2 after join release");
+ for(bool layout : {false,true}){
+  config::VrDualP1Left=layout;dualWield=false;guns[0].hand=Right;guns[0].triggerWas=false;
+  const bool tracked[2]={true,true};const float leftPull[2]={1.f,0.f},rightPull[2]={0.f,1.f},bothPull[2]={1.f,1.f};
+  transferSolo(tracked,leftPull);check(guns[0].hand==Left,"solo left trigger takes the gun with either layout setting");
+  transferSolo(tracked,rightPull);check(guns[0].hand==Right,"solo right trigger takes the gun with either layout setting");
+  transferSolo(tracked,bothPull);check(guns[0].hand==Right,"holding both triggers does not bounce the gun between hands");
+  guns[0].triggerWas=true;transferSolo(tracked,leftPull);check(guns[0].hand==Right,"held pull waits for release before transferring");
+  guns[0].triggerWas=false;dualWield=true;transferSolo(tracked,leftPull);check(guns[0].hand==Right,"dual wield keeps assigned guns on their hands");
+ }
+ dualWield=false;
  const char* words[]={"off","light","medium","strong"};const float multiplier[]={0,1,1.6f,2.4f};
  for(int level=0;level<4;++level)for(int hand=0;hand<2;++hand){
   config::VrHaptics.value=words[level];calls=0;float duration=haptic(hand,.03f,1.f);

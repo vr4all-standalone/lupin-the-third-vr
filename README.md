@@ -5,7 +5,7 @@
 # Lupin the Third VR
 ### Sega NAOMI Light-Gun Adventure · Standalone Meta Quest & PC VR
 
-[![Release v1.0.0](https://img.shields.io/badge/Release-v1.0.0_Experimental-d44c65?style=for-the-badge)](../../releases)
+[![Release v1.0.1](https://img.shields.io/badge/Release-v1.0.1_Experimental-d44c65?style=for-the-badge)](../../releases)
 [![Quest and PC VR](https://img.shields.io/badge/Headset-Quest_%C2%B7_PC_VR_OpenXR-blue?style=for-the-badge)](#installation)
 [![Original game required](https://img.shields.io/badge/Your_Game-lupinshoo_GDS--0018-orange?style=for-the-badge)](#what-you-need)
 
@@ -47,7 +47,7 @@ Tracking, comfort, sustained performance and later stages still need hands-on va
   fires. Empty magazines give a click without a firing kick. Haptics offers
   **Off, Light, Medium and Strong**.
 - **Two players on one headset.** P2 joins with the other controller, with a separate gun,
-  magazine, lives and score. **Hands** assigns P1 to the left or right controller.
+  magazine, lives and score. **2P: P1 left / P2 right** is On by default and applies only while both players are active.
 - **Two reload modes.** Shoot away from the view, or just point away once per exit.
   **B/Y** reload too. P1 has seven rounds; P2 has six.
 - **Empty hands in story scenes.** Guns, controllers and lasers disappear during
@@ -154,14 +154,17 @@ Default Quest Touch assignment:
 | Grip + stick left/right | Gun size |
 | Stick | Game D-pad |
 
-**Hands** swaps the players: P1 left uses X/Y, P2 right uses A/B. With two players active,
-changing Hands swaps their guns after the menu closes; a held trigger waits for release.
+**2P: P1 left / P2 right** defaults to **On**. Solo play keeps A/B for P1 Start/Reload,
+and pulling either trigger moves the single gun to that hand. X joins P2; while both
+players are active, P1 uses the left gun and X/Y, and P2 uses the right gun and A/B.
+Turn the option Off for P1 right / P2 left. Changing it swaps the dual guns after the menu
+closes; a held trigger waits for release. A held join button stays P2 Start until released.
 Touch, Index, Vive and WMR have their own labels and bindings. How to play shows them,
 with Trigger above Stick where present.
 
 ## The menu
 
-**Resume · Recenter · Gun · Gun angle · Reload · Hands · Laser · Haptics · World size ·
+**Resume · Recenter · Gun · Gun angle · Reload · 2P: P1 left / P2 right · Laser · Haptics · World size ·
 Panel distance · Wider view · How to play · Quit**
 
 Either hand can point and select; stick navigation and repeat work too. Game and audio

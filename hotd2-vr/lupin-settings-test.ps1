@@ -8,7 +8,7 @@ if(-not $out.StartsWith([IO.Path]::GetFullPath((Join-Path $repo 'build-win'))+'\
 New-Item -ItemType Directory -Path $out -Force | Out-Null
 $hostSource=[IO.File]::ReadAllText((Join-Path $repo 'core\rend\vr\xr_host.cpp'))
 $functions=@()
-foreach($signature in @('int p1Hand()','int hapticsLevel()','float haptic(int hand, float seconds, float amplitude)','Holds holds(int hand)')){
+foreach($signature in @('int dualP1Hand()','int p1Hand()','void playerStartButtons(bool leftStart, bool rightStart, bool& p1Start, bool& p2Start)','int hapticsLevel()','float haptic(int hand, float seconds, float amplitude)','Holds holds(int hand)')){
  $begin=$hostSource.IndexOf($signature+"`n{")
  if($begin -lt 0){$begin=$hostSource.IndexOf($signature+"`r`n{")}
  if($begin -lt 0){throw "Missing production function $signature"}
@@ -20,6 +20,11 @@ $swapBegin=$hostSource.IndexOf('if (dualWield && guns[0].hand != hand1)')
 $swapEnd=$hostSource.IndexOf("`n`t}",$swapBegin)
 if($swapBegin -lt 0 -or $swapEnd -le $swapBegin){throw 'Missing production hand-swap block'}
 $functions += "void syncHands(int hand1) {`n"+$hostSource.Substring($swapBegin,$swapEnd+3-$swapBegin)+"`n}"
+[IO.File]::WriteAllText((Join-Path $out 'settings_under_test.inc'),($functions -join "`n"),[Text.UTF8Encoding]::new($false))
+$soloBegin=$hostSource.IndexOf('Gun& gun = guns[0];',$hostSource.IndexOf('void updateLightgun('))
+$soloEnd=$hostSource.IndexOf("`n`t// The buttons that aren't the trigger.",$soloBegin)
+if($soloBegin -lt 0 -or $soloEnd -le $soloBegin){throw 'Missing production single-gun transfer block'}
+$functions += "void transferSolo(const bool tracked[2], const float pulls[2]) {`n"+$hostSource.Substring($soloBegin,$soloEnd-$soloBegin)+"`n}"
 [IO.File]::WriteAllText((Join-Path $out 'settings_under_test.inc'),($functions -join "`n"),[Text.UTF8Encoding]::new($false))
 $vswhere=Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
 $vsroot=& $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath

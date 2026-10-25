@@ -19,7 +19,7 @@ $on=@($one|ForEach-Object{$delay,$action=$_ -split '[|]',2; "$p1|$([double]$dela
 $run=Join-Path $repo "build-win\vrtest\$name"
 if(-not $Reuse) {
  & "$PSScriptRoot\vr-test.ps1" -Game lupinshoo -Name $name -Port 27036 -XrSim -Visible -Seconds 145 `
-  -Config 'config:vr.Widen=yes,config:vr.FovScale=2,config:vr.WidenFov=yes,config:vr.GameHands=yes,config:vr.BuiltInGun=no,config:vr.Gun=1,config:vr.Reload=1' `
+  -Config 'config:vr.Widen=yes,config:vr.FovScale=2,config:vr.WidenFov=yes,config:vr.DualP1Left=no,config:vr.GameHands=yes,config:vr.BuiltInGun=no,config:vr.Gun=1,config:vr.Reload=1' `
   -At @('60=xr right/a 1 200','64=xr right/a 1 1000','70=xr right/a 1 200') -On $on `
   -Expect @('VR: P1 magazine 0 -> 7','VR: P2 magazine 0 -> 6','XR: player 2 joins','XR: menu closed \(resumed\)')
  if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}

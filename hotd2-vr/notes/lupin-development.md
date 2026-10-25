@@ -47,8 +47,8 @@ Quest 3 is the primary target. Quest 3S, Quest 2, Quest Pro and PC VR compatibil
 inherited targets, with physical headset validation pending for this Lupin port.
 
 The standalone package is `lupin-the-third-vr-quest.apk`, application ID
-`com.vrlightgunhub.lupin`, label **Lupin the Third VR**, base version `1.0.0`, versionCode
-`1`. The APK versionName also records the source commit: `1.0.0-g<commit>`.
+`com.vrlightgunhub.lupin`, label **Lupin the Third VR**, base version `1.0.1`, versionCode
+`2`. The APK versionName also records the source commit: `1.0.1-g<commit>`.
 This app has its own settings and saves and can coexist with Confidential Mission VR.
 These are local builds; no publication or headset installation is part of this work.
 
@@ -297,3 +297,7 @@ they do not establish Lupin behavior.
 - The game and character names belong to their respective owners. Namco is a trademark of Bandai Namco, Zapper of Nintendo, Meta Quest of Meta.
 
 Unofficial fan project, not affiliated with Sega. No game is included.
+
+## Two-player hand layout (1.0.1)
+
+The menu toggle **2P: P1 left / P2 right** saves `vr.DualP1Left` and defaults to On, including upgrades from the earlier global `vr.P1Hand` setting. It affects only active dual wield. Solo controls stay A for P1 Start, X to join P2, either trigger to move the gun, and either reload button. Once P2 joins, X/Y belong to P1 on the left and A/B to P2 on the right; Off reverses the dual layout. A held join Start remains P2 until release.

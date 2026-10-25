@@ -52,7 +52,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 # src\vr\AndroidManifest.xml), its library entry, and the PC zip's start script (hotd2-vr\assets).
 $appId = 'com.vrlightgunhub.lupin'
 $appLabel = 'Lupin the Third VR'
-$appVersion = '1.0.0'
+$appVersion = '1.0.1'
 $appLauncher = 'com.flycast.emulator.LupinStartActivity'
 $playCmd = 'Play Lupin the Third.cmd'
 
@@ -222,7 +222,7 @@ function Find-AppIdentityFault([string[]]$badgingLines, [string[]]$manifestTree,
     $badging = $badgingLines | Where-Object { $_ -match '^package:' } | Select-Object -First 1
     $wantVersion = [regex]::Escape("$appVersion-g") + $(if ($testBuild) { '[0-9a-f]+' } else { [regex]::Escape($shortHash) })
     if ($badging -notmatch "^package: name='$([regex]::Escape($appId))'") { "the package is not $appId" }
-    if ($badging -notmatch "versionCode='1'") { 'the versionCode is not 1' }
+    if ($badging -notmatch "versionCode='2'") { 'the versionCode is not 2' }
     if ($badging -notmatch "versionName='$wantVersion'") {
         "the versionName is not $appVersion-g$(if ($testBuild) { '<commit>' } else { $shortHash })"
     }
@@ -432,11 +432,12 @@ Check the source README and Lupin findings for the current verified scope.
 3. Double-click "Play Lupin the Third.cmd". It starts flycast.exe with roms\lupinshoo.zip
    and the archive folder as its working directory, so this copy uses its own emu.cfg.
 
-Controls: trigger shoots, A is P1 Start, B is P1 Reload;
-X is P2 Start and Y is P2 Reload by default. Hands swaps the players and labels; with two
-players active their guns/reload buttons swap too. Left Menu opens settings, left stick click recenters,
+Solo controls: either trigger takes and fires the gun, A is P1 Start, either B/Y reloads,
+and X joins P2. The menu toggle "2P: P1 left / P2 right" is On by default: once P2 joins,
+P1 uses the left gun and X/Y, P2 the right gun and A/B. Off reverses the dual layout.
+The toggle never fixes the solo gun's hand. Left Menu opens settings, left stick click recenters,
 right stick click toggles the laser. The paused menu includes gun choice/angle, both reload
-modes, Hands, haptics Off/Light/Medium/Strong, world size, panel distance, wider view,
+modes, the 2P layout, haptics Off/Light/Medium/Strong, world size, panel distance, wider view,
 How to play and confirmed Quit. Hands are empty during noninteractive story scenes.
 First start makes a complete pistol from your own game. B skips; a later start retries.
 P1 has seven rounds, P2 six; native accepted rounds drive recoil/flash/haptics. No game data
