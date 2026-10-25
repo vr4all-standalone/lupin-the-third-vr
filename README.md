@@ -5,7 +5,7 @@
 # Lupin the Third VR
 ### Sega NAOMI Light-Gun Adventure · Standalone Meta Quest & PC VR
 
-[![Release v1.0.2](https://img.shields.io/badge/Release-v1.0.2_Experimental-d44c65?style=for-the-badge)](../../releases)
+[![Release v1.0.3](https://img.shields.io/badge/Release-v1.0.3_Experimental-d44c65?style=for-the-badge)](../../releases)
 [![Quest and PC VR](https://img.shields.io/badge/Headset-Quest_%C2%B7_PC_VR_OpenXR-blue?style=for-the-badge)](#installation)
 [![Original game required](https://img.shields.io/badge/Your_Game-lupinshoo_GDS--0018-orange?style=for-the-badge)](#what-you-need)
 
