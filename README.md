@@ -5,7 +5,7 @@
 # Lupin the Third VR
 ### Sega NAOMI Light-Gun Adventure · Standalone Meta Quest & PC VR
 
-[![Release v1.0.3](https://img.shields.io/badge/Release-v1.0.3_Experimental-d44c65?style=for-the-badge)](../../releases)
+[![Release v1.0.4](https://img.shields.io/badge/Release-v1.0.4_Experimental-d44c65?style=for-the-badge)](../../releases)
 [![Quest and PC VR](https://img.shields.io/badge/Headset-Quest_%C2%B7_PC_VR_OpenXR-blue?style=for-the-badge)](#installation)
 [![Original game required](https://img.shields.io/badge/Your_Game-lupinshoo_GDS--0018-orange?style=for-the-badge)](#what-you-need)
 
@@ -204,3 +204,15 @@ matching bundled files, and controller sides fall back independently.
 The first release binaries were verified from **`00706171d`**. The release tag identifies
 that corresponding source; the project page on `main` may have newer documentation.
 Game data and release signing material are never included.
+
+## Quest Start and Service buttons
+
+Play can launch immersive VR from Quest Home in passthrough or a virtual home.
+After loading, tap and release **A** to start P1. **X** requests P2 where the game
+supports local two-player play, after P1 has started; the second gun appears only
+when the game accepts P2. In two-player mode, short Start presses follow the saved
+hand assignment. Survivor retains its native single-player controls.
+
+Hold the right controller's **A for 3 seconds** to open the arcade Service menu.
+A purple progress notice shows the hold. Releasing early acts as a normal Start;
+releasing after Service opens does not send Start. Service holds are offline only.
