@@ -52,7 +52,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 # src\vr\AndroidManifest.xml), its library entry, and the PC zip's start script (hotd2-vr\assets).
 $appId = 'com.vrlightgunhub.lupin'
 $appLabel = 'Lupin the Third VR'
-$appVersion = '1.0.5'
+$appVersion = '1.0.6'
 $appLauncher = 'com.flycast.emulator.LupinStartActivity'
 $playCmd = 'Play Lupin the Third.cmd'
 

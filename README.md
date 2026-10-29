@@ -5,7 +5,7 @@
 # Lupin the Third VR
 ### Sega NAOMI Light-Gun Adventure · Standalone Meta Quest & PC VR
 
-[![Release v1.0.5](https://img.shields.io/badge/Release-v1.0.5_Experimental-d44c65?style=for-the-badge)](../../releases)
+[![Release v1.0.6](https://img.shields.io/badge/Release-v1.0.6_Experimental-d44c65?style=for-the-badge)](../../releases)
 [![Quest and PC VR](https://img.shields.io/badge/Headset-Quest_%C2%B7_PC_VR_OpenXR-blue?style=for-the-badge)](#installation)
 [![Original game required](https://img.shields.io/badge/Your_Game-lupinshoo_GDS--0018-orange?style=for-the-badge)](#what-you-need)
 
@@ -16,6 +16,10 @@
 </div>
 
 ---
+
+## Update v1.0.6
+
+Validated automatic entry, full P1 red/P2 blue Arcade body and grip with grey details preserved, and a new gun-angle zero matching the old -10 degree pose. Legacy angles reset once; later adjustments persist. [Release notes](docs/releases/v1.0.6.md).
 
 ## Overview
 
