@@ -5,15 +5,15 @@
 # Lupin the Third VR
 ### Sega NAOMI Light-Gun Adventure · Standalone Meta Quest & PC VR
 
-[☕ Donate to VR4ALL](https://ko-fi.com/vr4all)
-
 [![Release v1.0.7](https://img.shields.io/badge/Release-v1.0.7_Experimental-d44c65?style=for-the-badge)](../../releases)
 [![Quest and PC VR](https://img.shields.io/badge/Headset-Quest_%C2%B7_PC_VR_OpenXR-blue?style=for-the-badge)](#installation)
 [![Original game required](https://img.shields.io/badge/Your_Game-lupinshoo_GDS--0018-orange?style=for-the-badge)](#what-you-need)
 
 **[⬇️ Quest APK](../../releases/latest/download/lupin-the-third-vr-quest.apk)** · **[🖥️ PC VR ZIP](../../releases/latest/download/lupin-the-third-vr-pcvr.zip)** · **[🎮 Controls](#controls)**
 
-**[🌐 VR4ALL — Standalone VR Mod Installer](https://github.com/vr4all-standalone/vr4all-standalone-vr-mod-installer)**
+**[🌐 VR4ALL — Standalone VR Mod Installer](https://github.com/vr4all-standalone/vr4all-standalone)**
+
+[☕ Donate to VR4ALL](https://ko-fi.com/vr4all)
 
 </div>
 
@@ -94,7 +94,7 @@ Allow USB debugging on the headset. If you already use VR4ALL or SideQuest, this
 
 ### 2. Install with VR4ALL
 
-**[Get VR4ALL](https://github.com/vr4all-standalone/vr4all-standalone-vr-mod-installer)**,
+**[Get VR4ALL](https://github.com/vr4all-standalone/vr4all-standalone)**,
 open the latest build, select **Lupin the Third VR** and provide your own three files above.
 
 VR4ALL downloads the Quest APK, installs it, enables All files access and copies your
