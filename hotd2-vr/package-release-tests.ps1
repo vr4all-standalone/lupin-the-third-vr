@@ -42,7 +42,7 @@ function Archive([string]$name, [hashtable]$entries) {
 }
 try {
     Check 'Lupin application ID' ($appId -eq 'com.vrlightgunhub.lupin')
-    Check 'Lupin label' ($appLabel -eq 'Lupin the Third VR')
+    Check 'Lupin label' ($appLabel -eq 'Lupin the Third - VR4ALL')
     Check 'Lupin release base version' ($appVersion -eq '1.0.5')
     Check 'Lupin setup launcher' ($appLauncher -eq 'com.flycast.emulator.LupinStartActivity')
     Check 'Lupin PC launcher name' ($playCmd -eq 'Play Lupin the Third.cmd')
@@ -60,7 +60,7 @@ try {
     Check 'credited model accepted' (@(Find-UncreditedModels $archive).Count -eq 0)
     $gpl = Get-Content -LiteralPath (Join-Path $repo 'core/deps/picotcp/LICENSE.GPLv3') -Raw
     $mit = Get-Content -LiteralPath (Join-Path $repo 'core/deps/cgltf/LICENSE') -Raw
-    $licence = "Lupin the Third VR`n$gpl`n$mit"
+    $licence = "Lupin the Third - VR4ALL`n$gpl`n$mit"
     $archive = Archive 'licensed.zip' @{'LICENSE.txt'=$licence}
     Check 'GPL-3 and cgltf notice accepted' (-not (Find-LicenceFault $archive))
     $archive = Archive 'missing-mit.apk' @{'assets/LICENSE.txt'=$gpl}
@@ -77,7 +77,7 @@ try {
         '  E: application', '    E: activity', '      A: android:name(0x01010003)="com.flycast.emulator.LupinStartActivity"',
         '      E: intent-filter', '        E: category', '          A: android:name(0x01010003)="android.intent.category.LAUNCHER"')
     Check 'manifest launcher parser uses activity owner' (@(Get-LauncherOwners $tree) -join ',' -eq 'com.flycast.emulator.LupinStartActivity')
-    $badging = @("package: name='com.vrlightgunhub.lupin' versionCode='6' versionName='1.0.5-gabc123'", "application-label:'Lupin the Third VR'")
+    $badging = @("package: name='com.vrlightgunhub.lupin' versionCode='6' versionName='1.0.5-gabc123'", "application-label:'Lupin the Third - VR4ALL'")
     $hasIdentityCheck = [bool](Get-Command Find-AppIdentityFault -ErrorAction SilentlyContinue)
     Check 'APK metadata validator is independently testable' $hasIdentityCheck
     if ($hasIdentityCheck) {
@@ -87,7 +87,7 @@ try {
             @('version code', "versionCode='6'", "versionCode='9'"),
             @('base version', '1.0.5-gabc123', '1.2.0-gabc123'),
             @('commit version', '1.0.5-gabc123', '1.0.5-gdef456'),
-            @('label', 'Lupin the Third VR', 'Confidential Mission VR'))) {
+            @('label', 'Lupin the Third - VR4ALL', 'Confidential Mission VR'))) {
             $changed = @($badging | ForEach-Object { $_.Replace($case[1],$case[2]) })
             Check "wrong APK $($case[0]) rejected" (@(Find-AppIdentityFault $changed $tree 'abc123' $false).Count -gt 0)
         }
@@ -102,7 +102,7 @@ try {
     Check 'portable PC archive validator is independently testable' $hasPcCheck
     if ($hasPcCheck) {
         $files = @('flycast.exe','emu.cfg','README.txt','LICENSE.txt','Play Lupin the Third.cmd')
-        $readme = 'Lupin the Third VR. Implementation in progress. roms\lupinshoo.zip roms\lupinshoo\gds-0018.chd roms\naomi.zip Play Lupin the Third.cmd'
+        $readme = 'Lupin the Third - VR4ALL. Implementation in progress. roms\lupinshoo.zip roms\lupinshoo\gds-0018.chd roms\naomi.zip Play Lupin the Third.cmd'
         $entries = @{'flycast.exe'='synthetic'; 'emu.cfg'="[config]`npvr.rend = 0`nrend.NativeDepthInterpolation = yes`nvr.Xr = yes"; 'README.txt'=$readme; 'LICENSE.txt'=$licence; 'Play Lupin the Third.cmd'='start "" /D "%~dp0" "%~dp0flycast.exe" "%~dp0roms\lupinshoo.zip"'}
         $archive = Archive 'portable-valid.zip' $entries
         Check 'exact portable Lupin archive accepted' (@(Find-PcArchiveFault $archive $files).Count -eq 0)
@@ -133,7 +133,7 @@ try {
         $archive = Archive 'portable-production-templates.zip' $production
         Check 'production README config and launcher satisfy portable checks' (@(Find-PcArchiveFault $archive $files).Count -eq 0)
         Check 'packaged README explicitly marks implementation in progress' ($generatedReadme.Contains('Implementation in progress.'))
-        $entries['README.txt'] = $readme.Replace('Lupin the Third VR','Confidential Mission VR')
+        $entries['README.txt'] = $readme.Replace('Lupin the Third - VR4ALL','Confidential Mission VR')
         $archive = Archive 'portable-wrong-readme.zip' $entries
         Check 'stale CM README rejected' (@(Find-PcArchiveFault $archive $files).Count -gt 0)
         $entries['README.txt'] = $readme

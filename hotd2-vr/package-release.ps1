@@ -1,5 +1,5 @@
 <#
-  Packages Lupin the Third VR builds for the Quest and PC (implementation remains in progress)
+  Packages Lupin the Third - VR4ALL builds for the Quest and PC (implementation remains in progress)
   in dist\ (packaging checks do not establish gameplay or headset validation):
 
     lupin-the-third-vr-quest.apk   the Quest app (Quest 3, 3S, 2, Pro)
@@ -11,7 +11,7 @@
   is made on the spot. Both are checked for that (the names in their file lists: discs, keys,
   rips, frame grabs, models made from a game), and the APK for its signer: signed with the public
   debug key (no release key, see make-release-key.ps1) it is refused, since anyone could sign an
-  "update" of the app with that key. The APK is also checked for being Lupin the Third VR
+  "update" of the app with that key. The APK is also checked for being Lupin the Third - VR4ALL
   (its package, version and label, and its start screen the only entry in the headset's library),
   and the zip for holding exactly its files, with a README.txt that names no other game.
 
@@ -51,8 +51,8 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 # The app: its application ID, label and version (shell\android-studio\flycast\build.gradle.kts and
 # src\vr\AndroidManifest.xml), its library entry, and the PC zip's start script (hotd2-vr\assets).
 $appId = 'com.vrlightgunhub.lupin'
-$appLabel = 'Lupin the Third VR'
-$appVersion = '1.0.6'
+$appLabel = 'Lupin the Third - VR4ALL'
+$appVersion = '1.0.7'
 $appLauncher = 'com.flycast.emulator.LupinStartActivity'
 $playCmd = 'Play Lupin the Third.cmd'
 
@@ -222,7 +222,7 @@ function Find-AppIdentityFault([string[]]$badgingLines, [string[]]$manifestTree,
     $badging = $badgingLines | Where-Object { $_ -match '^package:' } | Select-Object -First 1
     $wantVersion = [regex]::Escape("$appVersion-g") + $(if ($testBuild) { '[0-9a-f]+' } else { [regex]::Escape($shortHash) })
     if ($badging -notmatch "^package: name='$([regex]::Escape($appId))'") { "the package is not $appId" }
-    if ($badging -notmatch "versionCode='7'") { 'the versionCode is not 7' }
+    if ($badging -notmatch "versionCode='8'") { 'the versionCode is not 8' }
     if ($badging -notmatch "versionName='$wantVersion'") {
         "the versionName is not $appVersion-g$(if ($testBuild) { '<commit>' } else { $shortHash })"
     }
@@ -412,7 +412,7 @@ rend.NativeDepthInterpolation = yes
 vr.Xr = yes
 '@
 $readme = @'
-Lupin the Third VR, PC development build
+Lupin the Third - VR4ALL, PC development build
 
 Implementation in progress. The CM 1.2 feature set is ported with Lupin-specific camera,
 calibration, native shot state and gun extraction. Physical headset validation and later-stage
